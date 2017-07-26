@@ -1,4 +1,4 @@
-# Go-auth-pubtkt
+# Go-auth-pubtkt [![Build Status](https://travis-ci.org/orange-cloudfoundry/go-auth-pubtkt.svg?branch=master)](https://travis-ci.org/orange-cloudfoundry/go-auth-pubtkt)
 
 This A golang implementation of [mod_auth_pubtkt](https://neon1.net/mod_auth_pubtkt/) with some enhancements 
 (cookie encryption, optional check options ..)
