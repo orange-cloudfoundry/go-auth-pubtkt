@@ -76,7 +76,11 @@ func (h AuthPubTktHandler) forgeRedirect(redirectUrl string, w http.ResponseWrit
 	query := redirect.Query()
 	requestUrl := req.URL.String()
 	if !req.URL.IsAbs() {
-		requestUrl = strings.Split(req.Host, ":")[0] + requestUrl
+		scheme := "http://"
+		if req.TLS != nil {
+			scheme = "https://"
+		}
+		requestUrl = scheme + strings.Split(req.Host, ":")[0] + requestUrl
 	}
 	query.Add(h.options.TKTAuthBackArgName, requestUrl)
 	redirect.RawQuery = query.Encode()
