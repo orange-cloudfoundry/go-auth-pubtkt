@@ -22,7 +22,9 @@ import (
 func main() {
     finalHandler := http.HandlerFunc(func(w http.ResponseWriter, req http.Request){
         w.WriteHeader(200)
-        w.Write([]byte("you are logged"))
+       
+        ticket := pubtkt.TicketRequest(req)
+        w.Write([]byte("you are logged as "+ ticket.Uid))
     })
     pubtktHandler, err := pubtkt.NewAuthPubTktHandler(pubtkt.AuthPubTktOptions{
         TKTAuthPublicKey: "mypublic key",
