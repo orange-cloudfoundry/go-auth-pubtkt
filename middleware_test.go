@@ -27,7 +27,7 @@ var _ = Describe("Middleware", func() {
 			It("should serve the next handler", func() {
 				expectedUrlPath := "handled by next handler"
 				h, err := NewAuthPubTktHandler(
-					AuthPubTktOptions{},
+					AuthPubTktOptions{TKTAuthLoginURL: "fake"},
 					http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 						req.URL.Path = expectedUrlPath
 					}),
@@ -44,7 +44,7 @@ var _ = Describe("Middleware", func() {
 			})
 			It("should pass ticket in context", func() {
 				h, err := NewAuthPubTktHandler(
-					AuthPubTktOptions{},
+					AuthPubTktOptions{TKTAuthLoginURL: "fake"},
 					http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 					SetCreateAuthPubTktFunc(funcFakePubTkt),
 				)
@@ -63,7 +63,7 @@ var _ = Describe("Middleware", func() {
 			})
 			It("should rewrite authorization if needed in the request when it's simple fake basic auth requested", func() {
 				h, err := NewAuthPubTktHandler(
-					AuthPubTktOptions{TKTAuthFakeBasicAuth: true},
+					AuthPubTktOptions{TKTAuthFakeBasicAuth: true, TKTAuthLoginURL: "fake"},
 					http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 					SetCreateAuthPubTktFunc(funcFakePubTkt),
 				)
@@ -83,7 +83,7 @@ var _ = Describe("Middleware", func() {
 			})
 			It("should rewrite authorization if needed in the request when it's simple bauth requested", func() {
 				h, err := NewAuthPubTktHandler(
-					AuthPubTktOptions{TKTAuthPassthruBasicAuth: true},
+					AuthPubTktOptions{TKTAuthPassthruBasicAuth: true, TKTAuthLoginURL: "fake"},
 					http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 					SetCreateAuthPubTktFunc(funcFakePubTkt),
 				)
@@ -105,7 +105,7 @@ var _ = Describe("Middleware", func() {
 				key := "AZERTYUIOPQSDFGH"
 				cryptedBauth := "6EAv9/i8HmAN3yr681s8OsNXJ4Xw0Qe70taHuUNvV7k=" // == mydata
 				h, err := NewAuthPubTktHandler(
-					AuthPubTktOptions{TKTAuthPassthruBasicAuth: true, TKTAuthPassthruBasicKey: key},
+					AuthPubTktOptions{TKTAuthPassthruBasicAuth: true, TKTAuthPassthruBasicKey: key, TKTAuthLoginURL: "fake"},
 					http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 					SetCreateAuthPubTktFunc(funcFakePubTkt),
 				)
@@ -131,7 +131,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should create status code and text when no details is needed and error don't create panic", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{},
+						AuthPubTktOptions{TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 						SetStatus("mystatus", 400),
@@ -148,7 +148,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should create status code and text with detail when details is needed and error don't create panic", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{},
+						AuthPubTktOptions{TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 						SetStatus("mystatus", 400),
@@ -166,7 +166,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should panic with error when error create panic", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{},
+						AuthPubTktOptions{TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 						SetStatus("mystatus", 400),
@@ -225,7 +225,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should redirect to TKTAuthPostTimeoutURL when error is caused when ticket expired and method used is POST", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{TKTAuthPostTimeoutURL: "http://post.timeout.redirect.com", TKTAuthBackArgName: "myback"},
+						AuthPubTktOptions{TKTAuthPostTimeoutURL: "http://post.timeout.redirect.com", TKTAuthBackArgName: "myback", TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 					)
@@ -241,7 +241,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should redirect to TKTAuthPostTimeoutURL when error is caused when ticket expired and method used is not POST", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{TKTAuthTimeoutURL: "http://timeout.redirect.com", TKTAuthBackArgName: "myback"},
+						AuthPubTktOptions{TKTAuthTimeoutURL: "http://timeout.redirect.com", TKTAuthBackArgName: "myback", TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 					)
@@ -257,7 +257,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should redirect to TKTAuthRefreshURL when error is caused when graceful expired", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{TKTAuthRefreshURL: "http://refresh.redirect.com", TKTAuthBackArgName: "myback"},
+						AuthPubTktOptions{TKTAuthRefreshURL: "http://refresh.redirect.com", TKTAuthBackArgName: "myback", TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 					)
@@ -273,7 +273,7 @@ var _ = Describe("Middleware", func() {
 				})
 				It("should redirect to TKTAuthUnauthURL when error is caused by no token matching tokens in ticket", func() {
 					h, err := NewAuthPubTktHandler(
-						AuthPubTktOptions{TKTAuthUnauthURL: "http://unauth.redirect.com", TKTAuthBackArgName: "myback"},
+						AuthPubTktOptions{TKTAuthUnauthURL: "http://unauth.redirect.com", TKTAuthBackArgName: "myback", TKTAuthLoginURL: "fake"},
 						http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {}),
 						SetCreateAuthPubTktFunc(funcFakePubTkt),
 					)

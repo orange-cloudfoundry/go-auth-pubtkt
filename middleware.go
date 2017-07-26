@@ -35,7 +35,7 @@ func NewAuthPubTktHandler(options AuthPubTktOptions, next http.Handler, handlerO
 		options.TKTAuthBackArgName = "back"
 	}
 	if options.TKTAuthLoginURL == "" {
-		fmt.Errorf("option TKTAuthLoginURL cannot be omitted")
+		return nil, fmt.Errorf("option TKTAuthLoginURL cannot be omitted")
 	}
 	if options.TKTAuthTimeoutURL == "" {
 		options.TKTAuthTimeoutURL = options.TKTAuthLoginURL
