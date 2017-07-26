@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 const (
@@ -73,7 +74,11 @@ func NewAuthPubTktHandler(options AuthPubTktOptions, next http.Handler, handlerO
 func (h AuthPubTktHandler) forgeRedirect(redirectUrl string, w http.ResponseWriter, req *http.Request) {
 	redirect, _ := url.Parse(redirectUrl)
 	query := redirect.Query()
-	query.Add(h.options.TKTAuthBackArgName, req.URL.String())
+	requestUrl := req.URL.String()
+	if !req.URL.IsAbs() {
+		requestUrl = strings.Split(req.Host, ":")[0] + requestUrl
+	}
+	query.Add(h.options.TKTAuthBackArgName, requestUrl)
 	redirect.RawQuery = query.Encode()
 	http.Redirect(w, req, redirect.String(), 302)
 }
