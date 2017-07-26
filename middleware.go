@@ -2,6 +2,7 @@ package pubtkt
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -32,6 +33,9 @@ func NewAuthPubTktHandler(options AuthPubTktOptions, next http.Handler, handlerO
 	}
 	if options.TKTAuthBackArgName == "" {
 		options.TKTAuthBackArgName = "back"
+	}
+	if options.TKTAuthLoginURL == "" {
+		fmt.Errorf("option TKTAuthLoginURL cannot be omitted")
 	}
 	if options.TKTAuthTimeoutURL == "" {
 		options.TKTAuthTimeoutURL = options.TKTAuthLoginURL
