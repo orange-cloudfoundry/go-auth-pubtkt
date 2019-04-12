@@ -15,7 +15,13 @@ func ParseTicket(ticketStr string) (*Ticket, error) {
 		DecodeHook: ticketDecoderHook,
 		Result:     ticket,
 	}
-
+	// apache module just splits ticket by sig; do the same
+	ticketParts := strings.SplitN(ticketStr,";sig=",2);
+	if len(ticketParts) == 2 {
+		ticket.SigData = ticketParts[0]
+	}  else {
+		return nil, NewErrNoSig()
+	}
 	decoder, err := mapstructure.NewDecoder(&config)
 	if err != nil {
 		return nil, err

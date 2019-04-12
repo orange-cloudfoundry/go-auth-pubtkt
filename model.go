@@ -2,7 +2,6 @@ package pubtkt
 
 import (
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -76,35 +75,15 @@ type Ticket struct {
 	Bauth       string    `mapstructure:"bauth"`
 	Validuntil  time.Time `mapstructure:"validuntil"`
 	Graceperiod time.Time `mapstructure:"graceperiod"`
+	// raw data "before signature" ; splitting and restructuring data is error-prone
+	SigData     string
 	Tokens      []string  `mapstructure:"tokens"`
 	Udata       string    `mapstructure:"udata"`
 	Sig         string    `mapstructure:"sig"`
 }
 
 func (t Ticket) DataString() string {
-	data := make([]string, 0)
-	if t.Uid != "" {
-		data = append(data, fmt.Sprintf("%s=%s", "uid", t.Uid))
-	}
-	if t.Cip != "" {
-		data = append(data, fmt.Sprintf("%s=%s", "cip", t.Cip))
-	}
-	if t.Bauth != "" {
-		data = append(data, fmt.Sprintf("%s=%s", "bauth", t.Bauth))
-	}
-	if !t.Validuntil.IsZero() {
-		data = append(data, fmt.Sprintf("%s=%d", "validuntil", t.Validuntil.Unix()))
-	}
-	if !t.Graceperiod.IsZero() {
-		data = append(data, fmt.Sprintf("%s=%d", "graceperiod", t.Graceperiod.Unix()))
-	}
-	if len(t.Tokens) != 0 {
-		data = append(data, fmt.Sprintf("%s=%s", "tokens", strings.Join(t.Tokens, ",")))
-	}
-	if t.Udata != "" {
-		data = append(data, fmt.Sprintf("%s=%s", "udata", t.Udata))
-	}
-	return strings.Join(data, ";")
+	return t.SigData
 }
 func (t Ticket) String() string {
 	data := t.DataString()

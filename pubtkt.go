@@ -210,7 +210,6 @@ func (a AuthPubTktImpl) verifyRsaSignature(ticket *Ticket) error {
 	}
 	hash.Write([]byte(ticket.DataString()))
 	digest := hash.Sum(nil)
-
 	err = rsa.VerifyPKCS1v15(pub, cryptoHash, digest, ds)
 	if err != nil {
 		return NewErrSigNotValid(err)

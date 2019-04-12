@@ -8,6 +8,15 @@ func NewErrNoTicket() error {
 func (e ErrNoTicket) Error() string {
 	return string(e)
 }
+type ErrNoSig string
+
+func NewErrNoSig() error {
+	return ErrNoSig("No signature found in ticke")
+}
+func (e ErrNoSig) Error() string {
+	return string(e)
+}
+
 
 type ErrNoSSl string
 
