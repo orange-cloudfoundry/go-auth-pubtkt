@@ -79,9 +79,13 @@ type Ticket struct {
 	Tokens      []string  `mapstructure:"tokens"`
 	Udata       string    `mapstructure:"udata"`
 	Sig         string    `mapstructure:"sig"`
+	RawData     string    `mapstructure:"-"`
 }
 
 func (t Ticket) DataString() string {
+	if t.RawData != "" {
+		return t.RawData
+	}
 	data := make([]string, 0)
 	if t.Uid != "" {
 		data = append(data, fmt.Sprintf("%s=%s", "uid", t.Uid))

@@ -65,3 +65,12 @@ func NewErrGracePeriodExpired() error {
 func (e ErrGracePeriodExpired) Error() string {
 	return string(e)
 }
+
+type ErrNoSig string
+
+func NewErrNoSig() error {
+	return ErrNoSig("No signature found in ticke")
+}
+func (e ErrNoSig) Error() string {
+	return string(e)
+}

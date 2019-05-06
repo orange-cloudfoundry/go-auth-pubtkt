@@ -4,11 +4,12 @@ import (
 	. "github.com/orange-cloudfoundry/go-auth-pubtkt"
 
 	"crypto/tls"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"net/http"
 	"net/url"
 	"time"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Pubtkt", func() {
@@ -25,6 +26,7 @@ var _ = Describe("Pubtkt", func() {
 				Uid:        "myuser",
 				Validuntil: time.Unix(1, 0),
 				Tokens:     []string{"token1", "token2"},
+				RawData:    "uid=myuser;validuntil=1;tokens=token1,token2",
 				Sig:        "mysignature",
 			}))
 		})
@@ -45,6 +47,7 @@ var _ = Describe("Pubtkt", func() {
 				Validuntil: time.Unix(1, 0),
 				Tokens:     []string{"token1", "token2"},
 				Sig:        "mysignature",
+				RawData:    "uid=myuser;validuntil=1;tokens=token1,token2",
 			}))
 		})
 	})
@@ -68,6 +71,7 @@ var _ = Describe("Pubtkt", func() {
 				Validuntil: time.Unix(1, 0),
 				Tokens:     []string{"token1", "token2"},
 				Sig:        "mysignature",
+				RawData:    "uid=myuser;validuntil=1;tokens=token1,token2",
 			}))
 		})
 		It("Should give correct ticket from header if it's set when it's set", func() {
@@ -89,6 +93,7 @@ var _ = Describe("Pubtkt", func() {
 				Validuntil: time.Unix(1, 0),
 				Tokens:     []string{"token1", "token2"},
 				Sig:        "mysignature",
+				RawData:    "uid=myuser;validuntil=1;tokens=token1,token2",
 			}))
 		})
 		It("Should give correct ticket from cookie by cascading if no header is set", func() {
@@ -110,6 +115,7 @@ var _ = Describe("Pubtkt", func() {
 				Validuntil: time.Unix(1, 0),
 				Tokens:     []string{"token1", "token2"},
 				Sig:        "mysignature",
+				RawData:    "uid=myuser;validuntil=1;tokens=token1,token2",
 			}))
 		})
 		It("Should give an error if no header or cookie are set", func() {
@@ -298,6 +304,8 @@ StOB7bD9meH5/rOy
 
 				ticket, err := auth.VerifyFromRequest(req)
 				Expect(err).ShouldNot(HaveOccurred())
+
+				defaultTicket.RawData = "uid=myuser;cip=127.0.0.1;validuntil=1;tokens=token1,token2"
 				Expect(ticket).Should(Equal(defaultTicket))
 
 			})
@@ -313,6 +321,7 @@ StOB7bD9meH5/rOy
 				})
 				Expect(err).ToNot(HaveOccurred())
 				defaultTicket.Sig = sha1Sig
+
 				req, _ := http.NewRequest("GET", "http://local.com", nil)
 				req.TLS = &tls.ConnectionState{}
 				req.Header.Set("X-Forwarded-For", "127.0.0.1:6060")
@@ -320,6 +329,8 @@ StOB7bD9meH5/rOy
 
 				ticket, err := auth.VerifyFromRequest(req)
 				Expect(err).ShouldNot(HaveOccurred())
+
+				defaultTicket.RawData = "uid=myuser;cip=127.0.0.1;validuntil=1;tokens=token1,token2"
 				Expect(ticket).Should(Equal(defaultTicket))
 
 			})

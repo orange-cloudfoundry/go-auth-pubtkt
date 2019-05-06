@@ -1,16 +1,25 @@
 package pubtkt
 
 import (
-	"github.com/mitchellh/mapstructure"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 func ParseTicket(ticketStr string) (*Ticket, error) {
 	ticketMap := parseStringToMap(ticketStr)
-	ticket := &Ticket{}
+
+	ticketParts := strings.SplitN(ticketStr, ";sig=", 2)
+	if len(ticketParts) < 2 {
+		return nil, NewErrNoSig()
+	}
+
+	ticket := &Ticket{
+		RawData: ticketParts[0],
+	}
 	config := mapstructure.DecoderConfig{
 		DecodeHook: ticketDecoderHook,
 		Result:     ticket,
@@ -26,6 +35,7 @@ func ParseTicket(ticketStr string) (*Ticket, error) {
 	}
 	return ticket, nil
 }
+
 func parseStringToMap(raw string) map[string]string {
 	rawMap := make(map[string]string)
 	elems := strings.Split(raw, ";")
