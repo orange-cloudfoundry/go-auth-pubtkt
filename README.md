@@ -101,6 +101,15 @@ type AuthPubTktOptions struct {
 	// A DSA or RSA public key in PEM format
 	// This public key will be used to verify ticket signatures
 	TKTAuthPublicKey string
+	// A DSA or RSA private key in PEM format
+    // This private key will be used to create ticket signature
+    // This is optional, only needed if you want sign ticket
+    TKTAuthPrivateKey string
+    // Domain to use when placing ticket as a cookie
+    // E.G.: .example.com
+    TKTAuthDomain string
+    // Set to true if all your website use https and ticket is placed in a cookie
+    TKTAuthSecureCookie bool
 	// String indicating what digest algorithm to use when verifying ticket signatures
 	// Valid values are SHA1, DSS1, SHA224, SHA256, SHA384, and SHA512
 	// If not specified, the old defaults of SHA1 (for an RSA public key) or DSS1 (for a DSA public key) will be used.
