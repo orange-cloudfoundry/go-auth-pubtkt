@@ -40,12 +40,47 @@ var _ = Describe("Hash", func() {
 			})
 		})
 	})
+	Context("EncrypString", func() {
+		Context("With ecb encryption", func() {
+			It("should encode correctly", func() {
+				crypted, err := NewOpenSSL().EncryptString(passPhraseEcb, "data", MethodEcb)
+				Expect(err).ToNot(HaveOccurred())
+
+				result, err := NewOpenSSL().DecryptString(passPhraseEcb, string(crypted), MethodEcb)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(string(result)).Should(Equal(expectedValue))
+			})
+		})
+		Context("With cbc encryption", func() {
+			It("should encode correctly", func() {
+				crypted, err := NewOpenSSL().EncryptString(passPhraseEcb, "data", MethodCbc)
+				Expect(err).ToNot(HaveOccurred())
+
+				result, err := NewOpenSSL().DecryptString(passPhraseEcb, string(crypted), MethodCbc)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(string(result)).Should(Equal(expectedValue))
+			})
+		})
+	})
 	Context("BauthDecrypt", func() {
 		It("Should decrypt bauth from aes-128-cbc", func() {
 			key := "AZERTYUIOPQSDFGH"
 			cryptedBauth := "6EAv9/i8HmAN3yr681s8OsNXJ4Xw0Qe70taHuUNvV7k=" // == mydata
 
 			res, err := BauthDecrypt(cryptedBauth, key)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(res).Should(Equal("mydata"))
+		})
+	})
+
+	Context("BauthEncryp", func() {
+		It("Should encrypt bauth from aes-128-cbc", func() {
+			key := "AZERTYUIOPQSDFGH"
+
+			crypted, err := BauthEncrypt("mydata", key)
+			Expect(err).ToNot(HaveOccurred())
+
+			res, err := BauthDecrypt(crypted, key)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(res).Should(Equal("mydata"))
 		})

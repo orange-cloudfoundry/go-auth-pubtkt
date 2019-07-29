@@ -50,16 +50,22 @@ import (
 func main() {
     auth, err := pubtkt.NewAuthPubTkt(pubtkt.AuthPubTktOptions{
         TKTAuthPublicKey: "mypublic key",
+        TKTAuthPrivateKey: "my private for signing",
         TKTAuthCookieName: "auth_pubtkt",
         TKTAuthHeader: []string{"Cookie"},
     })
     if err != nil {
         panic(err)
     }
-    err = auth.VerifyTicket(&pubtkt.Ticket{ 
-        Uid: "myuser",
-        Sig: "the_signature",
-    }, "")
+    tkt := &pubtkt.Ticket{ 
+       Uid: "myuser",
+       Sig: "the_signature",
+    }
+    err = auth.SignTicket(tkt)
+    if err != nil {
+        panic(err)
+    }
+    err = auth.VerifyTicket(tkt, "")
     if err != nil {
         panic(err)
     }
@@ -73,6 +79,12 @@ func main() {
     // RawToTicket(ticketStr string) (*Ticket, error)
     // Verify a ticket with signature, expiration, token (if set) and ip (against the provided ip and if TKTCheckIpEnabled option is true)
     // VerifyTicket(ticket *Ticket, clientIp string) error
+    // Place ticket in request as requested in options
+    // TicketInRequest(*http.Request, *Ticket) error
+    // Transform a ticket to a plain or encrypted ticket data
+    // TicketToRaw(ticket *Ticket) (string, error)
+    // This will add a signature to the ticket with private key set with TKTAuthPrivateKey option
+    // SignTicket(ticket *Ticket) error
 }
 ```
 

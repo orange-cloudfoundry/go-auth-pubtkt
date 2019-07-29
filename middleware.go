@@ -204,6 +204,7 @@ func SetStatus(statusText string, statusCode int) AuthPubTktHandlerOption {
 		return nil
 	}
 }
+
 func SetCreateAuthPubTktFunc(fn func(options AuthPubTktOptions) (AuthPubTkt, error)) AuthPubTktHandlerOption {
 	return func(h *AuthPubTktHandler) error {
 		var err error

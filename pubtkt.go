@@ -2,6 +2,7 @@ package pubtkt
 
 import (
 	"crypto/dsa"
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -18,11 +19,18 @@ type AuthPubTkt interface {
 	VerifyFromRequest(*http.Request) (*Ticket, error)
 	// Transform a request to a ticket (if found)
 	RequestToTicket(*http.Request) (*Ticket, error)
-	// Transform an encoded ticket or plain ticket as a ticket strcture
+	// Place ticket in request as requested in options
+	TicketInRequest(*http.Request, *Ticket) error
+	// Transform an encoded ticket or plain ticket as a ticket structure
 	RawToTicket(ticketStr string) (*Ticket, error)
+	// Transform a ticket to a plain or encrypted ticket data
+	TicketToRaw(ticket *Ticket) (string, error)
 	// Verify a ticket with signature, expiration, token (if set) and ip (against the provided ip and if TKTCheckIpEnabled option is true)
 	VerifyTicket(ticket *Ticket, clientIp string) error
+	// This will add a signature to the ticket with private key set with TKTAuthPrivateKey option
+	SignTicket(ticket *Ticket) error
 }
+
 type AuthPubTktImpl struct {
 	options AuthPubTktOptions
 	openSSL *OpenSSL
@@ -36,14 +44,12 @@ func NewAuthPubTkt(options AuthPubTktOptions) (AuthPubTkt, error) {
 	if options.TKTAuthPublicKey == "" {
 		return nil, fmt.Errorf("TKTAuthPublicKey must be set")
 	}
-	if options.TKTAuthCookieName == "" {
-		return nil, fmt.Errorf("TKTAuthCookieName must be set")
-	}
 	if options.TKTAuthHeader == nil || len(options.TKTAuthHeader) == 0 {
 		return nil, fmt.Errorf("TKTAuthHeader must be set")
 	}
 	return &AuthPubTktImpl{options, NewOpenSSL()}, nil
 }
+
 func (a AuthPubTktImpl) VerifyFromRequest(req *http.Request) (*Ticket, error) {
 	if req.TLS == nil && a.options.TKTAuthRequireSSL {
 		return nil, NewErrNoSSl()
@@ -63,6 +69,7 @@ func (a AuthPubTktImpl) VerifyFromRequest(req *http.Request) (*Ticket, error) {
 	}
 	return ticket, nil
 }
+
 func (a AuthPubTktImpl) RequestToTicket(req *http.Request) (*Ticket, error) {
 	var content string
 	for _, header := range a.options.TKTAuthHeader {
@@ -73,7 +80,11 @@ func (a AuthPubTktImpl) RequestToTicket(req *http.Request) (*Ticket, error) {
 				continue
 			}
 		}
-		cookie, err := req.Cookie(a.options.TKTAuthCookieName)
+		cookieName := "auth_pubtkt"
+		if a.options.TKTAuthCookieName != "" {
+			cookieName = a.options.TKTAuthCookieName
+		}
+		cookie, err := req.Cookie(cookieName)
 		if err != nil {
 			continue
 		}
@@ -89,6 +100,39 @@ func (a AuthPubTktImpl) RequestToTicket(req *http.Request) (*Ticket, error) {
 	}
 	return a.RawToTicket(content)
 }
+
+func (a AuthPubTktImpl) TicketInRequest(req *http.Request, ticket *Ticket) error {
+	ticketStr, err := a.TicketToRaw(ticket)
+	if err != nil {
+		return err
+	}
+	ticketStr = url.QueryEscape(ticketStr)
+	headers := a.options.TKTAuthHeader
+	if len(headers) == 0 {
+		headers = []string{"cookie"}
+	}
+	for _, header := range headers {
+		header = strings.ToLower(header)
+		if header != "cookie" {
+			req.Header.Set(header, ticketStr)
+			continue
+		}
+		cookieName := "auth_pubtkt"
+		if a.options.TKTAuthCookieName != "" {
+			cookieName = a.options.TKTAuthCookieName
+		}
+		cookie := &http.Cookie{
+			Name:    cookieName,
+			Path:    "/",
+			Value:   ticketStr,
+			Expires: ticket.Validuntil,
+			Secure:  a.options.TKTAuthSecureCookie,
+		}
+		req.Header.Set("Cookie", cookie.String())
+	}
+	return nil
+}
+
 func (a AuthPubTktImpl) RawToTicket(ticketStr string) (*Ticket, error) {
 	var err error
 	if a.options.TKTCypherTicketsWithPasswd != "" {
@@ -98,6 +142,17 @@ func (a AuthPubTktImpl) RawToTicket(ticketStr string) (*Ticket, error) {
 		}
 	}
 	return ParseTicket(ticketStr)
+}
+
+func (a AuthPubTktImpl) TicketToRaw(ticket *Ticket) (string, error) {
+	err := a.SignTicket(ticket)
+	if err != nil {
+		return "", err
+	}
+	if a.options.TKTCypherTicketsWithPasswd != "" {
+		return a.encrypt(ticket)
+	}
+	return ticket.String(), nil
 }
 
 func (a AuthPubTktImpl) VerifyTicket(ticket *Ticket, clientIp string) error {
@@ -119,6 +174,7 @@ func (a AuthPubTktImpl) VerifyTicket(ticket *Ticket, clientIp string) error {
 	}
 	return nil
 }
+
 func (a AuthPubTktImpl) verifyIp(ticket *Ticket, ip string) error {
 	if !a.options.TKTCheckIpEnabled || ticket.Cip == "" {
 		return nil
@@ -143,6 +199,7 @@ func (a AuthPubTktImpl) verifyToken(ticket *Ticket) error {
 	}
 	return NewErrNoValidToken()
 }
+
 func (a AuthPubTktImpl) verifyExpiration(ticket *Ticket) error {
 	if !ticket.Validuntil.IsZero() && TimeNowFunc().After(ticket.Validuntil) {
 		return NewErrValidationExpired()
@@ -152,6 +209,7 @@ func (a AuthPubTktImpl) verifyExpiration(ticket *Ticket) error {
 	}
 	return nil
 }
+
 func (a AuthPubTktImpl) verifySignature(ticket *Ticket) error {
 	authDigest := strings.ToLower(a.options.TKTAuthDigest)
 	if a.options.TKTAuthDigest == "" || authDigest == "dss1" {
@@ -162,6 +220,7 @@ func (a AuthPubTktImpl) verifySignature(ticket *Ticket) error {
 	}
 	return a.verifyRsaSignature(ticket)
 }
+
 func (a AuthPubTktImpl) verifyDsaSignature(ticket *Ticket) error {
 	block, _ := pem.Decode([]byte(a.options.TKTAuthPublicKey))
 	if block == nil {
@@ -186,6 +245,7 @@ func (a AuthPubTktImpl) verifyDsaSignature(ticket *Ticket) error {
 	}
 	return nil
 }
+
 func (a AuthPubTktImpl) verifyRsaSignature(ticket *Ticket) error {
 	block, _ := pem.Decode([]byte(a.options.TKTAuthPublicKey))
 	if block == nil {
@@ -217,6 +277,7 @@ func (a AuthPubTktImpl) verifyRsaSignature(ticket *Ticket) error {
 	}
 	return nil
 }
+
 func (a AuthPubTktImpl) decrypt(encTkt string) (string, error) {
 	data, err := a.openSSL.DecryptString(
 		a.options.TKTCypherTicketsWithPasswd,
@@ -226,4 +287,33 @@ func (a AuthPubTktImpl) decrypt(encTkt string) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+func (a AuthPubTktImpl) encrypt(ticket *Ticket) (string, error) {
+	data, err := a.openSSL.EncryptString(
+		a.options.TKTCypherTicketsWithPasswd,
+		ticket.String(),
+		EncMethod(strings.ToUpper(a.options.TKTCypherTicketsMethod)))
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+func (a AuthPubTktImpl) SignTicket(ticket *Ticket) error {
+	if a.options.TKTAuthPrivateKey == "" {
+		return fmt.Errorf("no TKTAuthPrivateKey found")
+	}
+
+	signer, err := ParsePrivateKey([]byte(a.options.TKTAuthPrivateKey))
+	if err != nil {
+		return fmt.Errorf("Error when parse private key: %s", err.Error())
+	}
+	sign, err := signer.Sign(rand.Reader, []byte(ticket.DataString()))
+	if err != nil {
+		return fmt.Errorf("Error when create signature: %s", err.Error())
+	}
+
+	ticket.Sig = base64.StdEncoding.EncodeToString(sign.Blob)
+	return nil
 }
