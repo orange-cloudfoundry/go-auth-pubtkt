@@ -21,6 +21,10 @@ type AuthPubTkt interface {
 	RequestToTicket(*http.Request) (*Ticket, error)
 	// Place ticket in request as requested in options
 	TicketInRequest(*http.Request, *Ticket) error
+	// Place ticket in response writer as requested in options
+	TicketInResponse(http.ResponseWriter, *Ticket) error
+	// Place ticket in http headers as requested in options
+	TicketInHeader(inHeader http.Header, ticket *Ticket) error
 	// Transform an encoded ticket or plain ticket as a ticket structure
 	RawToTicket(ticketStr string) (*Ticket, error)
 	// Transform a ticket to a plain or encrypted ticket data
@@ -102,6 +106,14 @@ func (a AuthPubTktImpl) RequestToTicket(req *http.Request) (*Ticket, error) {
 }
 
 func (a AuthPubTktImpl) TicketInRequest(req *http.Request, ticket *Ticket) error {
+	return a.TicketInHeader(req.Header, ticket)
+}
+
+func (a AuthPubTktImpl) TicketInResponse(resp http.ResponseWriter, ticket *Ticket) error {
+	return a.TicketInHeader(resp.Header(), ticket)
+}
+
+func (a AuthPubTktImpl) TicketInHeader(inHeader http.Header, ticket *Ticket) error {
 	ticketStr, err := a.TicketToRaw(ticket)
 	if err != nil {
 		return err
@@ -114,7 +126,7 @@ func (a AuthPubTktImpl) TicketInRequest(req *http.Request, ticket *Ticket) error
 	for _, header := range headers {
 		header = strings.ToLower(header)
 		if header != "cookie" {
-			req.Header.Set(header, ticketStr)
+			inHeader.Set(header, ticketStr)
 			continue
 		}
 		cookieName := "auth_pubtkt"
@@ -124,11 +136,16 @@ func (a AuthPubTktImpl) TicketInRequest(req *http.Request, ticket *Ticket) error
 		cookie := &http.Cookie{
 			Name:    cookieName,
 			Path:    "/",
+			Domain:  a.options.TKTAuthDomain,
 			Value:   ticketStr,
 			Expires: ticket.Validuntil,
 			Secure:  a.options.TKTAuthSecureCookie,
 		}
-		req.Header.Set("Cookie", cookie.String())
+		if inHeader.Get("Cookie") != "" {
+			inHeader.Add("Cookie", cookie.String())
+		} else {
+			inHeader.Set("Cookie", cookie.String())
+		}
 	}
 	return nil
 }

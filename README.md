@@ -81,6 +81,7 @@ func main() {
     // VerifyTicket(ticket *Ticket, clientIp string) error
     // Place ticket in request as requested in options
     // TicketInRequest(*http.Request, *Ticket) error
+    // TicketInResponse(http.ResponseWriter, *Ticket) error
     // Transform a ticket to a plain or encrypted ticket data
     // TicketToRaw(ticket *Ticket) (string, error)
     // This will add a signature to the ticket with private key set with TKTAuthPrivateKey option
@@ -173,4 +174,4 @@ type AuthPubTktOptions struct {
 ```
 
 **Note**: Disclaimer about `TKTCypherTicketsMethod` with the ecb method, orange forked [mod_auth_pubtkt](https://neon1.net/mod_auth_pubtkt/) 
-to add ticket encryption and use ecb method, **you must always chose to use cbc method**
+to add ticket encryption and use ecb method, **you must always chose to use cbc method if you want to use apache plugin from original pubtkt**

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/orange-cloudfoundry/go-auth-pubtkt"
+	pubtkt "github.com/orange-cloudfoundry/go-auth-pubtkt"
 )
 
 type FakeAuthPubTkt struct {
@@ -46,6 +46,18 @@ type FakeAuthPubTkt struct {
 	signTicketReturnsOnCall map[int]struct {
 		result1 error
 	}
+	TicketInHeaderStub        func(http.Header, *pubtkt.Ticket) error
+	ticketInHeaderMutex       sync.RWMutex
+	ticketInHeaderArgsForCall []struct {
+		arg1 http.Header
+		arg2 *pubtkt.Ticket
+	}
+	ticketInHeaderReturns struct {
+		result1 error
+	}
+	ticketInHeaderReturnsOnCall map[int]struct {
+		result1 error
+	}
 	TicketInRequestStub        func(*http.Request, *pubtkt.Ticket) error
 	ticketInRequestMutex       sync.RWMutex
 	ticketInRequestArgsForCall []struct {
@@ -56,6 +68,18 @@ type FakeAuthPubTkt struct {
 		result1 error
 	}
 	ticketInRequestReturnsOnCall map[int]struct {
+		result1 error
+	}
+	TicketInResponseStub        func(http.ResponseWriter, *pubtkt.Ticket) error
+	ticketInResponseMutex       sync.RWMutex
+	ticketInResponseArgsForCall []struct {
+		arg1 http.ResponseWriter
+		arg2 *pubtkt.Ticket
+	}
+	ticketInResponseReturns struct {
+		result1 error
+	}
+	ticketInResponseReturnsOnCall map[int]struct {
 		result1 error
 	}
 	TicketToRawStub        func(*pubtkt.Ticket) (string, error)
@@ -286,6 +310,67 @@ func (fake *FakeAuthPubTkt) SignTicketReturnsOnCall(i int, result1 error) {
 	}{result1}
 }
 
+func (fake *FakeAuthPubTkt) TicketInHeader(arg1 http.Header, arg2 *pubtkt.Ticket) error {
+	fake.ticketInHeaderMutex.Lock()
+	ret, specificReturn := fake.ticketInHeaderReturnsOnCall[len(fake.ticketInHeaderArgsForCall)]
+	fake.ticketInHeaderArgsForCall = append(fake.ticketInHeaderArgsForCall, struct {
+		arg1 http.Header
+		arg2 *pubtkt.Ticket
+	}{arg1, arg2})
+	fake.recordInvocation("TicketInHeader", []interface{}{arg1, arg2})
+	fake.ticketInHeaderMutex.Unlock()
+	if fake.TicketInHeaderStub != nil {
+		return fake.TicketInHeaderStub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.ticketInHeaderReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeAuthPubTkt) TicketInHeaderCallCount() int {
+	fake.ticketInHeaderMutex.RLock()
+	defer fake.ticketInHeaderMutex.RUnlock()
+	return len(fake.ticketInHeaderArgsForCall)
+}
+
+func (fake *FakeAuthPubTkt) TicketInHeaderCalls(stub func(http.Header, *pubtkt.Ticket) error) {
+	fake.ticketInHeaderMutex.Lock()
+	defer fake.ticketInHeaderMutex.Unlock()
+	fake.TicketInHeaderStub = stub
+}
+
+func (fake *FakeAuthPubTkt) TicketInHeaderArgsForCall(i int) (http.Header, *pubtkt.Ticket) {
+	fake.ticketInHeaderMutex.RLock()
+	defer fake.ticketInHeaderMutex.RUnlock()
+	argsForCall := fake.ticketInHeaderArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *FakeAuthPubTkt) TicketInHeaderReturns(result1 error) {
+	fake.ticketInHeaderMutex.Lock()
+	defer fake.ticketInHeaderMutex.Unlock()
+	fake.TicketInHeaderStub = nil
+	fake.ticketInHeaderReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeAuthPubTkt) TicketInHeaderReturnsOnCall(i int, result1 error) {
+	fake.ticketInHeaderMutex.Lock()
+	defer fake.ticketInHeaderMutex.Unlock()
+	fake.TicketInHeaderStub = nil
+	if fake.ticketInHeaderReturnsOnCall == nil {
+		fake.ticketInHeaderReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.ticketInHeaderReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
 func (fake *FakeAuthPubTkt) TicketInRequest(arg1 *http.Request, arg2 *pubtkt.Ticket) error {
 	fake.ticketInRequestMutex.Lock()
 	ret, specificReturn := fake.ticketInRequestReturnsOnCall[len(fake.ticketInRequestArgsForCall)]
@@ -343,6 +428,67 @@ func (fake *FakeAuthPubTkt) TicketInRequestReturnsOnCall(i int, result1 error) {
 		})
 	}
 	fake.ticketInRequestReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeAuthPubTkt) TicketInResponse(arg1 http.ResponseWriter, arg2 *pubtkt.Ticket) error {
+	fake.ticketInResponseMutex.Lock()
+	ret, specificReturn := fake.ticketInResponseReturnsOnCall[len(fake.ticketInResponseArgsForCall)]
+	fake.ticketInResponseArgsForCall = append(fake.ticketInResponseArgsForCall, struct {
+		arg1 http.ResponseWriter
+		arg2 *pubtkt.Ticket
+	}{arg1, arg2})
+	fake.recordInvocation("TicketInResponse", []interface{}{arg1, arg2})
+	fake.ticketInResponseMutex.Unlock()
+	if fake.TicketInResponseStub != nil {
+		return fake.TicketInResponseStub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.ticketInResponseReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeAuthPubTkt) TicketInResponseCallCount() int {
+	fake.ticketInResponseMutex.RLock()
+	defer fake.ticketInResponseMutex.RUnlock()
+	return len(fake.ticketInResponseArgsForCall)
+}
+
+func (fake *FakeAuthPubTkt) TicketInResponseCalls(stub func(http.ResponseWriter, *pubtkt.Ticket) error) {
+	fake.ticketInResponseMutex.Lock()
+	defer fake.ticketInResponseMutex.Unlock()
+	fake.TicketInResponseStub = stub
+}
+
+func (fake *FakeAuthPubTkt) TicketInResponseArgsForCall(i int) (http.ResponseWriter, *pubtkt.Ticket) {
+	fake.ticketInResponseMutex.RLock()
+	defer fake.ticketInResponseMutex.RUnlock()
+	argsForCall := fake.ticketInResponseArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *FakeAuthPubTkt) TicketInResponseReturns(result1 error) {
+	fake.ticketInResponseMutex.Lock()
+	defer fake.ticketInResponseMutex.Unlock()
+	fake.TicketInResponseStub = nil
+	fake.ticketInResponseReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeAuthPubTkt) TicketInResponseReturnsOnCall(i int, result1 error) {
+	fake.ticketInResponseMutex.Lock()
+	defer fake.ticketInResponseMutex.Unlock()
+	fake.TicketInResponseStub = nil
+	if fake.ticketInResponseReturnsOnCall == nil {
+		fake.ticketInResponseReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.ticketInResponseReturnsOnCall[i] = struct {
 		result1 error
 	}{result1}
 }
@@ -543,8 +689,12 @@ func (fake *FakeAuthPubTkt) Invocations() map[string][][]interface{} {
 	defer fake.requestToTicketMutex.RUnlock()
 	fake.signTicketMutex.RLock()
 	defer fake.signTicketMutex.RUnlock()
+	fake.ticketInHeaderMutex.RLock()
+	defer fake.ticketInHeaderMutex.RUnlock()
 	fake.ticketInRequestMutex.RLock()
 	defer fake.ticketInRequestMutex.RUnlock()
+	fake.ticketInResponseMutex.RLock()
+	defer fake.ticketInResponseMutex.RUnlock()
 	fake.ticketToRawMutex.RLock()
 	defer fake.ticketToRawMutex.RUnlock()
 	fake.verifyFromRequestMutex.RLock()

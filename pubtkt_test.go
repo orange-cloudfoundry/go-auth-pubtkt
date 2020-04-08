@@ -1,12 +1,13 @@
 package pubtkt_test
 
 import (
-	. "github.com/orange-cloudfoundry/go-auth-pubtkt"
-
 	"crypto/tls"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"time"
+
+	. "github.com/orange-cloudfoundry/go-auth-pubtkt"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -339,6 +340,52 @@ aUu2Z8JldUWSq2sphCGj
 				Expect(err).ToNot(HaveOccurred())
 
 				tktRaw, _ := url.QueryUnescape(req.Header.Get("X-Pub-Tkt"))
+				Expect(err).ToNot(HaveOccurred())
+
+				tkt, err := auth.RawToTicket(tktRaw)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(defaultTicket.DataString()).To(Equal(tkt.DataString()))
+			})
+		})
+		Context("TicketInResponse", func() {
+			It("should put ticket inside cookie when cookie required", func() {
+				auth, err := NewAuthPubTkt(AuthPubTktOptions{
+					TKTAuthPublicKey:  pubKeyRsa,
+					TKTAuthPrivateKey: privKeyRsa,
+					TKTAuthCookieName: "fake",
+					TKTAuthHeader:     []string{"cookie"},
+				})
+				Expect(err).ToNot(HaveOccurred())
+
+				resp := httptest.NewRecorder()
+
+				err = auth.TicketInResponse(resp, defaultTicket)
+				Expect(err).ToNot(HaveOccurred())
+
+				req := http.Request{Header: resp.Header()}
+				cookie, err := req.Cookie("fake")
+				Expect(err).ToNot(HaveOccurred())
+
+				tktRaw, _ := url.QueryUnescape(cookie.Value)
+
+				tkt, err := auth.RawToTicket(tktRaw)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(defaultTicket.DataString()).To(Equal(tkt.DataString()))
+			})
+			It("should put ticket inside header when header required", func() {
+				auth, err := NewAuthPubTkt(AuthPubTktOptions{
+					TKTAuthPublicKey:  pubKeyRsa,
+					TKTAuthPrivateKey: privKeyRsa,
+					TKTAuthHeader:     []string{"X-Pub-Tkt"},
+				})
+				Expect(err).ToNot(HaveOccurred())
+
+				resp := httptest.NewRecorder()
+
+				err = auth.TicketInResponse(resp, defaultTicket)
+				Expect(err).ToNot(HaveOccurred())
+
+				tktRaw, _ := url.QueryUnescape(resp.Header().Get("X-Pub-Tkt"))
 				Expect(err).ToNot(HaveOccurred())
 
 				tkt, err := auth.RawToTicket(tktRaw)
