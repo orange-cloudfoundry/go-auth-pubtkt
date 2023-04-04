@@ -172,46 +172,6 @@ LM7yfzgsimLlqoMZLm66j82/lNqKSiMlnTPN8sP2LoKZ0vKNc3iulT8g8BuFcHT/
 xFn9Fdsp/a/Y4I0JEEA76FAarnRZxpUhLC8pKpF6CjUetnUwp7g=
 -----END RSA PRIVATE KEY-----`
 
-		pubKeyDsa := `-----BEGIN PUBLIC KEY-----
-MIIDODCCAisGByqGSM44BAEwggIeAoIBAQDsgZumckiMIe4UNkxfHkg9OGiVJaDX
-76g8oodG5dCwqxb5JN9QNeIj8mpyOPsVg0uq6v16MaCGkAwVIlIvCjBULMCzLdUP
-N3Rcwf5rUWyrYu+nfs4XXEwFHMqOPl+GgkK3b6Z3jrf/FwjCuDJDqm6wvBVo1o5g
-GIkfYZAn+pX8tpT8xeHXM5tCjeKEHz0Vwu6JahT03LmetqFCSoNJJi07Fa9NWyqJ
-byJHi3lcIIJPimeCZsC2NC+rXzoJ292tfa2OgsON2btQLD/6daa7jdukpzL84FYA
-qhqMJfaEEJgdoHlUrwxCEu6cCLUqWD2YaoRG7m69zQG4L5/vzCAH/AkZAhUAmjb+
-JTswjkZ6og46tbkCaQ7JWFMCgf9iJkAD3D5gannM4q2kHaoPxmxPcMe93CstJ8Na
-I4A69rTzYxJmpWz83HxCIh0JVWFtOajFguuUV3mTAmqIw1O3MFXLRiCWLSQLEFS4
-oQ7jrFfuhKP1XC9gcTvyKLFhSyt2iU6j38XkZME1sH8McMEXVO+KfufsauZqYJni
-1mNZ7uilWwkSEXIFfj91zdF1ELxwprsrwFFbClhTsLSgopx9/na0fOmi9pDyoJZV
-ymo/dnF3/PF7guhF3Owj9JShzgKBGpEe3BB0bbhfvKHYE5QQOHF+qSGWDeXcEul1
-lWqa8lAJyMnp5FCyIFYH1qNw5HBoayf7HlGaUd8oCk9q+boDggEFAAKCAQB8chaK
-eH8/AMOUiOMUZulHGqF4MGLQDxDP854BDZSPcb10lUuXfRJvXdN1gM4T+E2oC3Jv
-AeNepm7PqTSr23Hy+GQ7ey+LTO1Z2aSHjOf2rMOEJrqwj43zDxuRj5oMYstD3mR6
-elGshc8N0HA7qIMoRdCkZfslh6vbd9SGQqIT3qkIh7jOcp8V3gi2fAkz5ZXmkODV
-QOZkGj1O0vPk3+gVrVXKnQj5WF7wtT+iUEBs6L65hmXYMown4wzolJq+XT3lliAq
-pzY+pD9CXCD6qkeXWXSxLfhlVs+42bPzebiS5lZr6yZ5knR0QM10oT+0ApODWmbd
-StOB7bD9meH5/rOy
------END PUBLIC KEY-----`
-		privKeyDsa := `-----BEGIN DSA PRIVATE KEY-----
-MIIDOwIBAAKCAQEA7IGbpnJIjCHuFDZMXx5IPTholSWg1++oPKKHRuXQsKsW+STf
-UDXiI/Jqcjj7FYNLqur9ejGghpAMFSJSLwowVCzAsy3VDzd0XMH+a1Fsq2Lvp37O
-F1xMBRzKjj5fhoJCt2+md463/xcIwrgyQ6pusLwVaNaOYBiJH2GQJ/qV/LaU/MXh
-1zObQo3ihB89FcLuiWoU9Ny5nrahQkqDSSYtOxWvTVsqiW8iR4t5XCCCT4pngmbA
-tjQvq186CdvdrX2tjoLDjdm7UCw/+nWmu43bpKcy/OBWAKoajCX2hBCYHaB5VK8M
-QhLunAi1Klg9mGqERu5uvc0BuC+f78wgB/wJGQIVAJo2/iU7MI5GeqIOOrW5AmkO
-yVhTAoH/YiZAA9w+YGp5zOKtpB2qD8ZsT3DHvdwrLSfDWiOAOva082MSZqVs/Nx8
-QiIdCVVhbTmoxYLrlFd5kwJqiMNTtzBVy0Ygli0kCxBUuKEO46xX7oSj9VwvYHE7
-8iixYUsrdolOo9/F5GTBNbB/DHDBF1Tvin7n7GrmamCZ4tZjWe7opVsJEhFyBX4/
-dc3RdRC8cKa7K8BRWwpYU7C0oKKcff52tHzpovaQ8qCWVcpqP3Zxd/zxe4LoRdzs
-I/SUoc4CgRqRHtwQdG24X7yh2BOUEDhxfqkhlg3l3BLpdZVqmvJQCcjJ6eRQsiBW
-B9ajcORwaGsn+x5RmlHfKApPavm6AoIBAHxyFop4fz8Aw5SI4xRm6UcaoXgwYtAP
-EM/zngENlI9xvXSVS5d9Em9d03WAzhP4TagLcm8B416mbs+pNKvbcfL4ZDt7L4tM
-7VnZpIeM5/asw4QmurCPjfMPG5GPmgxiy0PeZHp6UayFzw3QcDuogyhF0KRl+yWH
-q9t31IZCohPeqQiHuM5ynxXeCLZ8CTPlleaQ4NVA5mQaPU7S8+Tf6BWtVcqdCPlY
-XvC1P6JQQGzovrmGZdgyjCfjDOiUmr5dPeWWICqnNj6kP0JcIPqqR5dZdLEt+GVW
-z7jZs/N5uJLmVmvrJnmSdHRAzXShP7QCk4NaZt1K04HtsP2Z4fn+s7ICFAqAGLT+
-aUu2Z8JldUWSq2sphCGj
------END DSA PRIVATE KEY-----`
 		BeforeEach(func() {
 			TimeNowFunc = func() time.Time {
 				return time.Unix(0, 0)
@@ -229,23 +189,6 @@ aUu2Z8JldUWSq2sphCGj
 					TKTAuthPublicKey:  pubKeyRsa,
 					TKTAuthPrivateKey: privKeyRsa,
 					TKTAuthCookieName: "fake",
-					TKTAuthHeader:     []string{"fake"},
-				})
-				Expect(err).ToNot(HaveOccurred())
-
-				err = auth.SignTicket(defaultTicket)
-				Expect(err).ToNot(HaveOccurred())
-				Expect(defaultTicket.Sig).NotTo(BeEmpty())
-
-				err = auth.VerifyTicket(defaultTicket, "127.0.0.1")
-				Expect(err).ShouldNot(HaveOccurred())
-			})
-			It("should sign ticket with private key when using dsa", func() {
-				auth, err := NewAuthPubTkt(AuthPubTktOptions{
-					TKTAuthPublicKey:  pubKeyDsa,
-					TKTAuthPrivateKey: privKeyDsa,
-					TKTAuthCookieName: "fake",
-					TKTAuthDigest:     "DSS1",
 					TKTAuthHeader:     []string{"fake"},
 				})
 				Expect(err).ToNot(HaveOccurred())
@@ -408,27 +351,7 @@ zQIDAQAB
 -----END PUBLIC KEY-----`
 
 		sha1Sig := "CLB5SmRpGGiYwUM76MXfVS+h9cp9nq3G6xQ13/XrvTOXon2lR903Wuixz/zEt2ljZm9gSosfZmpa12k3csEOKqwGvZCDHJCfb/EibY/xDXJjgGv89XMtIwYSmDjJ1GJOuPG0YERZALIyfHmMLJZOXq6QalzQ/PRRNeZn93k+8KeetsO33W785vnSqDMkwL9JIJHHcxSd4pJLPsSUCQVPXJN5mWZWI56J0KHZht08klKc2EFx39jd4QImjWEu188HvQ5/NO4L6COjS/J29JrAGWN3IRvu7gq7Krzcm8wdkL1Hf4r2vsS1unpT6E0MfaIqLZOa9FPsvIp3EP4M2ugwLg=="
-		dss1Sig := "MC0CFQCUijdPIW3yHoPtru/my77rdVrJVAIUfdtGuRsTd1B2V2LCET/LILiX/II="
-		pubKeyDsa := `-----BEGIN PUBLIC KEY-----
-MIIDODCCAisGByqGSM44BAEwggIeAoIBAQDsgZumckiMIe4UNkxfHkg9OGiVJaDX
-76g8oodG5dCwqxb5JN9QNeIj8mpyOPsVg0uq6v16MaCGkAwVIlIvCjBULMCzLdUP
-N3Rcwf5rUWyrYu+nfs4XXEwFHMqOPl+GgkK3b6Z3jrf/FwjCuDJDqm6wvBVo1o5g
-GIkfYZAn+pX8tpT8xeHXM5tCjeKEHz0Vwu6JahT03LmetqFCSoNJJi07Fa9NWyqJ
-byJHi3lcIIJPimeCZsC2NC+rXzoJ292tfa2OgsON2btQLD/6daa7jdukpzL84FYA
-qhqMJfaEEJgdoHlUrwxCEu6cCLUqWD2YaoRG7m69zQG4L5/vzCAH/AkZAhUAmjb+
-JTswjkZ6og46tbkCaQ7JWFMCgf9iJkAD3D5gannM4q2kHaoPxmxPcMe93CstJ8Na
-I4A69rTzYxJmpWz83HxCIh0JVWFtOajFguuUV3mTAmqIw1O3MFXLRiCWLSQLEFS4
-oQ7jrFfuhKP1XC9gcTvyKLFhSyt2iU6j38XkZME1sH8McMEXVO+KfufsauZqYJni
-1mNZ7uilWwkSEXIFfj91zdF1ELxwprsrwFFbClhTsLSgopx9/na0fOmi9pDyoJZV
-ymo/dnF3/PF7guhF3Owj9JShzgKBGpEe3BB0bbhfvKHYE5QQOHF+qSGWDeXcEul1
-lWqa8lAJyMnp5FCyIFYH1qNw5HBoayf7HlGaUd8oCk9q+boDggEFAAKCAQB8chaK
-eH8/AMOUiOMUZulHGqF4MGLQDxDP854BDZSPcb10lUuXfRJvXdN1gM4T+E2oC3Jv
-AeNepm7PqTSr23Hy+GQ7ey+LTO1Z2aSHjOf2rMOEJrqwj43zDxuRj5oMYstD3mR6
-elGshc8N0HA7qIMoRdCkZfslh6vbd9SGQqIT3qkIh7jOcp8V3gi2fAkz5ZXmkODV
-QOZkGj1O0vPk3+gVrVXKnQj5WF7wtT+iUEBs6L65hmXYMown4wzolJq+XT3lliAq
-pzY+pD9CXCD6qkeXWXSxLfhlVs+42bPzebiS5lZr6yZ5knR0QM10oT+0ApODWmbd
-StOB7bD9meH5/rOy
------END PUBLIC KEY-----`
+
 		BeforeEach(func() {
 			TimeNowFunc = func() time.Time {
 				return time.Unix(0, 0)
@@ -455,7 +378,7 @@ StOB7bD9meH5/rOy
 				_, isErrSigNotValid := err.(ErrSigNotValid)
 				Expect(isErrSigNotValid).Should(BeTrue())
 			})
-			It("Should use either rsa or dsa verify when TKTAuthDigest is not set", func() {
+			It("Should use rsa verify when TKTAuthDigest is not set", func() {
 				authRsa, err := NewAuthPubTkt(AuthPubTktOptions{
 					TKTAuthPublicKey:  pubKeyRsa,
 					TKTCheckIpEnabled: false,
@@ -464,21 +387,9 @@ StOB7bD9meH5/rOy
 					TKTAuthHeader:     []string{"fake"},
 				})
 				Expect(err).ToNot(HaveOccurred())
-				authDsa, err := NewAuthPubTkt(AuthPubTktOptions{
-					TKTAuthPublicKey:  pubKeyDsa,
-					TKTCheckIpEnabled: false,
-					TKTAuthToken:      []string{"token1"},
-					TKTAuthCookieName: "fake",
-					TKTAuthHeader:     []string{"fake"},
-				})
-
-				Expect(err).ToNot(HaveOccurred())
-				defaultTicket.Sig = sha1Sig
+				
+                defaultTicket.Sig = sha1Sig
 				err = authRsa.VerifyTicket(defaultTicket, "")
-				Expect(err).ShouldNot(HaveOccurred())
-
-				defaultTicket.Sig = dss1Sig
-				err = authDsa.VerifyTicket(defaultTicket, "")
 				Expect(err).ShouldNot(HaveOccurred())
 			})
 			It("should complain about token not found when user doesn't have the requested token", func() {
