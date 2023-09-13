@@ -1,6 +1,6 @@
 module github.com/orange-cloudfoundry/go-auth-pubtkt
 
-go 1.20
+go 1.21
 
 require (
 	github.com/mitchellh/mapstructure v1.5.0
