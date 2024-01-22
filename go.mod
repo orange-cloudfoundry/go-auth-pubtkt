@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.30.0
+	github.com/onsi/gomega v1.31.1
 	golang.org/x/crypto v0.18.0
 )
 
