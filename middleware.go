@@ -124,7 +124,6 @@ func (h AuthPubTktHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	h.writeErr(err, w)
-	return
 }
 
 func (h AuthPubTktHandler) WriteBasicAuth(ticket *Ticket, req *http.Request) error {
