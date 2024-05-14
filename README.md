@@ -15,26 +15,26 @@ This can be used in two different ways:
 package main
 
 import (
-        "net/http"
-        "github.com/orange-cloudfoundry/go-auth-pubtkt"
+	"github.com/orange-cloudfoundry/go-auth-pubtkt"
+	"net/http"
 )
 
 func main() {
-    finalHandler := http.HandlerFunc(func(w http.ResponseWriter, req http.Request){
-        w.WriteHeader(200)
-       
-        ticket := pubtkt.TicketRequest(req)
-        w.Write([]byte("you are logged as "+ ticket.Uid))
-    })
-    pubtktHandler, err := pubtkt.NewAuthPubTktHandler(pubtkt.AuthPubTktOptions{
-        TKTAuthPublicKey: "mypublic key",
-    }, finalHandler)
-    // you can also see handler option in https://github.com/orange-cloudfoundry/go-auth-pubtkt/blob/master/middleware.go#L171-L203
-    if err != nil {
-        panic(err)
-    }
-    http.HandleFunc("/", pubtktHandler)
-    http.ListenAndServe(":8080", nil)
+	finalHandler := http.HandlerFunc(func(w http.ResponseWriter, req http.Request) {
+		w.WriteHeader(200)
+
+		ticket := pubtkt.TicketRequest(req)
+		w.Write([]byte("you are logged as " + ticket.Uid))
+	})
+	pubtktHandler, err := pubtkt.NewAuthPubTktHandler(pubtkt.AuthPubTktOptions{
+		TKTAuthPublicKey: "mypublic key",
+	}, finalHandler)
+	// you can also see handler option in https://github.com/orange-cloudfoundry/go-auth-pubtkt/blob/master/middleware.go#L171-L203
+	if err != nil {
+		panic(err)
+	}
+	http.HandleFunc("/", pubtktHandler)
+	http.ListenAndServe(":8080", nil)
 }
 ```
 

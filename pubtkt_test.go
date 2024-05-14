@@ -387,8 +387,8 @@ zQIDAQAB
 					TKTAuthHeader:     []string{"fake"},
 				})
 				Expect(err).ToNot(HaveOccurred())
-				
-                defaultTicket.Sig = sha1Sig
+
+				defaultTicket.Sig = sha1Sig
 				err = authRsa.VerifyTicket(defaultTicket, "")
 				Expect(err).ShouldNot(HaveOccurred())
 			})
