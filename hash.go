@@ -108,7 +108,7 @@ func (o OpenSSL) EncryptString(passphrase, plainData string, method EncMethod) (
 	}
 
 	dataCrypted := base64.StdEncoding.EncodeToString(encData)
-	return []byte(dataCrypted), nil
+	return []byte(dataCrypted), err
 }
 
 func (o OpenSSL) decryptEcb(key, data []byte, isSalted bool) ([]byte, error) {
