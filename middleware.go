@@ -150,7 +150,6 @@ func (h AuthPubTktHandler) WriteBasicAuth(ticket *Ticket, req *http.Request) err
 func (h AuthPubTktHandler) writeErr(err error, w http.ResponseWriter) {
 	if h.panicOnError {
 		panic(err)
-		return
 	}
 	statusText := h.statusText
 	if h.showErrorDetails {
