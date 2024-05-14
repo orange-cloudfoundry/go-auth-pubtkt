@@ -15,23 +15,23 @@ import (
 )
 
 type AuthPubTkt interface {
-	// Verify ticket and pre-check from a request
+	// VerifyFromRequest Verify ticket and pre-check from a request
 	VerifyFromRequest(*http.Request) (*Ticket, error)
-	// Transform a request to a ticket (if found)
+	// RequestToTicket Transform a request to a ticket (if found)
 	RequestToTicket(*http.Request) (*Ticket, error)
-	// Place ticket in request as requested in options
+	// TicketInRequest Place ticket in request as requested in options
 	TicketInRequest(*http.Request, *Ticket) error
-	// Place ticket in response writer as requested in options
+	// TicketInResponse Place ticket in response writer as requested in options
 	TicketInResponse(http.ResponseWriter, *Ticket) error
-	// Place ticket in http headers as requested in options
+	// TicketInHeader Place ticket in http headers as requested in options
 	TicketInHeader(inHeader http.Header, ticket *Ticket) error
-	// Transform an encoded ticket or plain ticket as a ticket structure
+	// RawToTicket Transform an encoded ticket or plain ticket as a ticket structure
 	RawToTicket(ticketStr string) (*Ticket, error)
-	// Transform a ticket to a plain or encrypted ticket data
+	// TicketToRaw Transform a ticket to a plain or encrypted ticket data
 	TicketToRaw(ticket *Ticket) (string, error)
-	// Verify a ticket with signature, expiration, token (if set) and ip (against the provided ip and if TKTCheckIpEnabled option is true)
+	// VerifyTicket Verify a ticket with signature, expiration, token (if set) and ip (against the provided ip and if TKTCheckIpEnabled option is true)
 	VerifyTicket(ticket *Ticket, clientIp string) error
-	// This will add a signature to the ticket with private key set with TKTAuthPrivateKey option
+	// SignTicket This will add a signature to the ticket with private key set with TKTAuthPrivateKey option
 	SignTicket(ticket *Ticket) error
 }
 
@@ -245,7 +245,7 @@ func (a AuthPubTktImpl) verifyDsaSignature(ticket *Ticket) error {
 	}
 	cert, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		return fmt.Errorf("Error when parse public key: %s", err.Error())
+		return fmt.Errorf("error when parse public key: %s", err.Error())
 	}
 	pub, isDsa := cert.(*dsa.PublicKey)
 	if !isDsa {
@@ -270,7 +270,7 @@ func (a AuthPubTktImpl) verifyRsaSignature(ticket *Ticket) error {
 	}
 	cert, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		return fmt.Errorf("Error when parse public key: %s", err.Error())
+		return fmt.Errorf("error when parse public key: %s", err.Error())
 	}
 	pub, isRsa := cert.(*rsa.PublicKey)
 	if !isRsa {
@@ -283,7 +283,7 @@ func (a AuthPubTktImpl) verifyRsaSignature(ticket *Ticket) error {
 	}
 	hash, cryptoHash, err := FindHash(authDigest)
 	if err != nil {
-		return fmt.Errorf("Error when finding hash: %s", err.Error())
+		return fmt.Errorf("error when finding hash: %s", err.Error())
 	}
 	hash.Write([]byte(ticket.DataString()))
 	digest := hash.Sum(nil)
@@ -324,11 +324,11 @@ func (a AuthPubTktImpl) SignTicket(ticket *Ticket) error {
 
 	signer, err := ParsePrivateKey([]byte(a.options.TKTAuthPrivateKey))
 	if err != nil {
-		return fmt.Errorf("Error when parse private key: %s", err.Error())
+		return fmt.Errorf("error when parse private key: %s", err.Error())
 	}
 	sign, err := signer.Sign(rand.Reader, []byte(ticket.DataString()))
 	if err != nil {
-		return fmt.Errorf("Error when create signature: %s", err.Error())
+		return fmt.Errorf("error when create signature: %s", err.Error())
 	}
 
 	ticket.Sig = base64.StdEncoding.EncodeToString(sign.Blob)

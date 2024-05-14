@@ -179,7 +179,7 @@ func setTicket(ticket *Ticket, req *http.Request) {
 
 type AuthPubTktHandlerOption func(*AuthPubTktHandler) error
 
-// If used unrecognized error send a panic instead
+// PanicOnError - If used unrecognized error send a panic instead
 func PanicOnError() AuthPubTktHandlerOption {
 	return func(h *AuthPubTktHandler) error {
 		h.panicOnError = true
@@ -187,7 +187,7 @@ func PanicOnError() AuthPubTktHandlerOption {
 	}
 }
 
-// If used error details will be write in request response
+// ShowErrorDetails If used error details will be written in request response
 func ShowErrorDetails() AuthPubTktHandlerOption {
 	return func(h *AuthPubTktHandler) error {
 		h.showErrorDetails = true
@@ -195,7 +195,7 @@ func ShowErrorDetails() AuthPubTktHandlerOption {
 	}
 }
 
-// Customize status text and status code when an unrecognized error occurred in request responqe
+// SetStatus Customize status text and status code when an unrecognized error occurred in request response
 func SetStatus(statusText string, statusCode int) AuthPubTktHandlerOption {
 	return func(h *AuthPubTktHandler) error {
 		h.statusText = statusText

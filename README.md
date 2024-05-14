@@ -1,7 +1,7 @@
 # Go-auth-pubtkt [![Build Status](https://travis-ci.org/orange-cloudfoundry/go-auth-pubtkt.svg?branch=master)](https://travis-ci.org/orange-cloudfoundry/go-auth-pubtkt)
 
 This A golang implementation of [mod_auth_pubtkt](https://neon1.net/mod_auth_pubtkt/) with some enhancements 
-(cookie encryption, optional check options ..)
+(cookie encryption, optional check options...)
 
 ## Usage
 
@@ -174,4 +174,4 @@ type AuthPubTktOptions struct {
 ```
 
 **Note**: Disclaimer about `TKTCypherTicketsMethod` with the ecb method, orange forked [mod_auth_pubtkt](https://neon1.net/mod_auth_pubtkt/) 
-to add ticket encryption and use ecb method, **you must always chose to use cbc method if you want to use apache plugin from original pubtkt**
+to add ticket encryption and use ecb method, **you must always choose to use cbc method if you want to use apache plugin from original pubtkt**
