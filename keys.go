@@ -74,7 +74,7 @@ func parseAuthorizedKey(in []byte) (out PublicKey, comment string, err error) {
 	return out, comment, nil
 }
 
-// ParseAuthorizedKeys parses a public key from an authorized_keys
+// ParseAuthorizedKey - parses a public key from an authorized_keys
 // file used in OpenSSH according to the sshd(8) manual page.
 func ParseAuthorizedKey(in []byte) (out PublicKey, comment string, options []string, rest []byte, err error) {
 	for len(in) > 0 {
@@ -550,7 +550,7 @@ func ParseRawPrivateKeyWithPassphrase(pemBytes, passPhrase []byte) (interface{},
 			var err error
 			buf, err = x509.DecryptPEMBlock(block, passPhrase)
 			if err != nil {
-				if err == x509.IncorrectPasswordError {
+				if errors.Is(err, x509.IncorrectPasswordError) {
 					return nil, err
 				}
 				return nil, fmt.Errorf("ssh: cannot decode encrypted private keys: %v", err)

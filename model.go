@@ -34,11 +34,11 @@ type AuthPubTktOptions struct {
 	TKTAuthPostTimeoutURL string
 	// URL that users whose ticket doesn't contain any of the required tokens (as set with TKTAuthToken) will be redirected to
 	TKTAuthUnauthURL string
-	// URL that users whose ticket is within the grace period (as set with the graceperiod key in the ticket) before the actual expiry will be redirected to.
+	// URL that users whose ticket is within the grace period (as set with the `graceperiod` key in the ticket) before the actual expiry will be redirected to.
 	// Only GET requests are redirected; POST requests are accepted normally. The script at this URL should check the ticket and issue a new one
 	// If not set, TKTAuthLoginURL is used
 	TKTAuthRefreshURL string
-	// A space separated list of headers to use for finding the ticket (case insensitive).
+	// A space separated list of headers to use for finding the ticket (case-insensitive).
 	// If this header specified is Cookie then the format of the value expects to be a valid cookie (subject to the TKTAuthCookieName directive).
 	// Any other header assumes the value is a simple URL-encoded value of the ticket.
 	// The first header that has content is tried and any other tickets in other header(s) are ignored.

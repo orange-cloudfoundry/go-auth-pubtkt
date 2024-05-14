@@ -60,7 +60,7 @@ func NewOpenSSL() *OpenSSL {
 	}
 }
 
-// Decrypt string that was encrypted using OpenSSL and AES-256-CBC or AES-256-ECB
+// DecryptString - Decrypt string that was encrypted using OpenSSL and AES-256-CBC or AES-256-ECB
 func (o OpenSSL) DecryptString(passphrase, encryptedBase64String string, method EncMethod) ([]byte, error) {
 	data, err := base64.StdEncoding.DecodeString(encryptedBase64String)
 	if err != nil {
@@ -83,7 +83,7 @@ func (o OpenSSL) DecryptString(passphrase, encryptedBase64String string, method 
 	return o.decryptEcb(creds.key, data, isSalted)
 }
 
-// Encrypt string that as OpenSSL like with AES-256-CBC or AES-256-ECB
+// EncryptString - Encrypt string that as OpenSSL like with AES-256-CBC or AES-256-ECB
 func (o OpenSSL) EncryptString(passphrase, plainData string, method EncMethod) ([]byte, error) {
 	salt, err := o.GenerateSalt()
 	if err != nil {
@@ -108,7 +108,7 @@ func (o OpenSSL) EncryptString(passphrase, plainData string, method EncMethod) (
 	}
 
 	dataCrypted := base64.StdEncoding.EncodeToString(encData)
-	return []byte(dataCrypted), nil
+	return []byte(dataCrypted), err
 }
 
 func (o OpenSSL) decryptEcb(key, data []byte, isSalted bool) ([]byte, error) {
@@ -305,7 +305,7 @@ func FindHash(hashStr string) (hash.Hash, crypto.Hash, error) {
 	case Hsha512:
 		return sha512.New(), crypto.SHA512, nil
 	default:
-		return nil, crypto.Hash(0), fmt.Errorf("Hash %s is not a sha hash", hashStr)
+		return nil, crypto.Hash(0), fmt.Errorf("hash %s is not a sha hash", hashStr)
 	}
 }
 

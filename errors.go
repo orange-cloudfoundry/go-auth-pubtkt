@@ -69,7 +69,7 @@ func (e ErrGracePeriodExpired) Error() string {
 type ErrNoSig string
 
 func NewErrNoSig() error {
-	return ErrNoSig("No signature found in ticke")
+	return ErrNoSig("No signature found in ticket")
 }
 func (e ErrNoSig) Error() string {
 	return string(e)

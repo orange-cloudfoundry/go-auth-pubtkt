@@ -2,12 +2,12 @@ package pubtkt_test
 
 import (
 	. "github.com/orange-cloudfoundry/go-auth-pubtkt"
+	"io"
 
 	"errors"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/orange-cloudfoundry/go-auth-pubtkt/pubtktfakes"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -293,7 +293,7 @@ var _ = Describe("Middleware", func() {
 })
 
 func respToString(resp *http.Response) string {
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
 	}
