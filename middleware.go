@@ -14,14 +14,13 @@ const (
 
 type AuthPubTktContextKey int
 type AuthPubTktHandler struct {
-	auth                 AuthPubTkt
-	options              AuthPubTktOptions
-	next                 http.Handler
-	panicOnError         bool
-	showErrorDetails     bool
-	statusText           string
-	statusCode           int
-	createAuthPubTktFunc func(options AuthPubTktOptions) AuthPubTkt
+	auth             AuthPubTkt
+	options          AuthPubTktOptions
+	next             http.Handler
+	panicOnError     bool
+	showErrorDetails bool
+	statusText       string
+	statusCode       int
 }
 
 func NewAuthPubTktHandler(options AuthPubTktOptions, next http.Handler, handlerOpts ...AuthPubTktHandlerOption) (*AuthPubTktHandler, error) {
