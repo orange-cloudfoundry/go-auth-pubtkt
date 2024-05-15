@@ -154,6 +154,7 @@ func (h AuthPubTktHandler) writeErr(err error, w http.ResponseWriter) {
 		statusText += "\nError details: " + err.Error()
 	}
 	w.WriteHeader(h.statusCode)
+	// nolint:errcheck
 	w.Write([]byte(statusText))
 }
 func TicketRequest(req *http.Request) *Ticket {
