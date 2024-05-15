@@ -163,6 +163,7 @@ func MarshalAuthorizedKey(key PublicKey) []byte {
 	b.WriteString(key.Type())
 	b.WriteByte(' ')
 	e := base64.NewEncoder(base64.StdEncoding, b)
+	// nolint:errcheck
 	e.Write(key.Marshal())
 	e.Close()
 	b.WriteByte('\n')
